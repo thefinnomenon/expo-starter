@@ -5,7 +5,8 @@ import { StyleSheet, Text, View } from 'react-native';
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
+      <Text>process.env.NODE_ENV: {process.env.NODE_ENV}</Text>
+      <Text>process.env.NAME: {process.env.NAME}</Text>
       <StatusBar style="auto" />
     </View>
   );
