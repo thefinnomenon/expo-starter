@@ -11,11 +11,16 @@
     "babel-plugin-inline-dotenv": "^1.6.0",
     "dotenv": "^10.0.0",
     "expo": "~42.0.1",
+    "expo-application": "~3.2.0",
+    "expo-constants": "~11.0.1",
+    "expo-device": "~3.3.0",
     "expo-status-bar": "~1.0.4",
+    "expo-updates": "~0.8.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
-    "react-native-web": "~0.13.12"
+    "react-native-web": "~0.13.12",
+    "sentry-expo": "^4.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
