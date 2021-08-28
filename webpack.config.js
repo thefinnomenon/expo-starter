@@ -11,7 +11,7 @@ module.exports = async (env, argv) => {
       path: `./envs/.env.${process.env.NODE_ENV}`
     })
   ]
-
+  
   config.resolve.alias = {
     ...config.resolve.alias,
 
