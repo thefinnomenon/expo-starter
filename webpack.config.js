@@ -1,9 +1,17 @@
 const createExpoWebpackConfigAsync = require('@expo/webpack-config');
+const Dotenv = require('dotenv-webpack');
 const path = require('path');
 
 module.exports = async (env, argv) => {
   const config = await createExpoWebpackConfigAsync(env, argv);
 
+  config.plugins = [
+    ...config.plugins,
+    new Dotenv({
+      path: `./envs/.env.${process.env.NODE_ENV}`
+    })
+  ]
+  
   config.resolve.alias = {
     ...config.resolve.alias,
 
