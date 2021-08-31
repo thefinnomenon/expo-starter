@@ -109,7 +109,6 @@ const getDeviceType = () => {
 export const updateEndpointLocation = async () => {
   let place, coords;
   const cachedRGC = await getItem(StorageKeys.REVERSE_GEOCODE);
-  console.log('cachedRGC: ', cachedRGC);
 
   if (!cachedRGC) {
     const location = await getLocation();
@@ -130,38 +129,6 @@ export const updateEndpointLocation = async () => {
       postalCode: place?.PostalCode,
       region: place?.Region
   }
-
-  // await Analytics.updateEndpoint({ location: config });
-  log.info('Updated endpoint with location info');
-  log.debug('\n', JSON.stringify(config, null, 2));
-}
-
-/* Update endpoint config with address */
-export const updateEndpointAddress = async () => {
-  let place, coords;
-  const cachedRGC = await getItem(StorageKeys.REVERSE_GEOCODE);
-  
-  if (!cachedRGC) {
-    const location = await getLocation();
-    const reverseGeo = await getReverseGeocode(location.coords);
-    place = reverseGeo.Results[0].Place;
-    coords = location.coords;
-    await setItem(StorageKeys.REVERSE_GEOCODE, { place, coords }, 60 * 60 * 24);
-  } else {
-    place = cachedRGC['place'];
-    coords = cachedRGC['coords'];
-  }
-
-  const config = {
-    city: place?.Municipality,
-    country: place?.Country,
-    latitude: coords?.latitude,
-    longitude: coords?.longitude,
-    postalCode: place?.PostalCode,
-    region: place?.Region
-  }
-
-  console.log(config);
 
   await Analytics.updateEndpoint({ location: config });
   log.info('Updated endpoint with location info');
