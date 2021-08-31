@@ -7,6 +7,12 @@
     "web": "expo start --web",
     "deploy:dev": "cd backend && NODE_ENV=development cdk deploy",
     "deploy:prod": "cd backend && NODE_ENV=production cdk deploy",
+    "test": "jest",
+    "test:dev": "jest --watch --changedSince=origin/master",
+    "test:debug": "jest -o --watch",
+    "test:updateSnapshots": "jest -u",
+    "test:ci": "jest --coverage",
+    "test:badges": "npm run test:ci  && jest-coverage-badges --input coverage/coverage-summary.json --output __badges__",
     "eject": "expo eject"
   },
   "dependencies": {
@@ -36,10 +42,18 @@
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@expo/webpack-config": "^0.15.0",
+    "@testing-library/jest-native": "^4.0.2",
+    "@testing-library/react-native": "^7.2.0",
+    "@types/jest": "^27.0.1",
     "@types/react": "~16.9.35",
     "@types/react-native": "~0.63.2",
+    "@types/react-test-renderer": "^17.0.1",
     "babel-plugin-module-resolver": "^4.1.0",
     "dotenv-webpack": "^7.0.3",
+    "jest-coverage-badges": "^1.1.2",
+    "jest-expo": "^42.1.0",
+    "react-test-renderer": "^17.0.2",
+    "ts-jest": "^26",
     "typescript": "~4.0.0"
   },
   "private": true

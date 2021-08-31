@@ -1,7 +1,7 @@
 import LOGGER from '@/services/logger';
 LOGGER.enable('APP');
 const log = LOGGER.extend('APP');
-import Amplify, { Analytics } from 'aws-amplify';
+import { Analytics } from 'aws-amplify';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
@@ -9,7 +9,7 @@ import Sentry, { initSentry } from '@/services/sentry';
 import { initAmplify } from '@/api/amplify';
 import { initLocation, getLocation, getReverseGeocode } from '@/services/location';
 import { updateEndpointLocation } from '@/services/analytics';
-import { SomeUtility } from '@/utilities/test';
+import { SomeUtility } from '@/utilities/testUtility';
 import { LocationObject } from 'expo-location';
 import { SearchPlaceIndexForPositionResponse } from "aws-sdk/clients/location";
 
