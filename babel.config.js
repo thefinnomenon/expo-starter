@@ -1,4 +1,4 @@
-module.exports = function(api) {
+module.exports = function (api) {
   api.cache(true);
   return {
     presets: ['babel-preset-expo'],
@@ -18,20 +18,30 @@ module.exports = function(api) {
             '@/styles': './src/styles',
             '@/utilities': './src/utilities',
           },
-        }
-      ]
+        },
+      ],
     ],
     env: {
       development: {
-        plugins: [["inline-dotenv", {
-          path: './envs/.env.development'
-        }]]
+        plugins: [
+          [
+            'inline-dotenv',
+            {
+              path: './envs/.env.development',
+            },
+          ],
+        ],
       },
       production: {
-        plugins: [["inline-dotenv", {
-          path: './envs/.env.production'
-        }]]
-      }
-    }
+        plugins: [
+          [
+            'inline-dotenv',
+            {
+              path: './envs/.env.production',
+            },
+          ],
+        ],
+      },
+    },
   };
 };

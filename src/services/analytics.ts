@@ -1,6 +1,3 @@
-import LOGGER from '@/services/logger';
-LOGGER.enable('ANALYTICS');
-const log = LOGGER.extend('ANALYTICS');
 import { Platform, Dimensions, PlatformIOSStatic, PlatformAndroidStatic, PlatformWebStatic } from 'react-native';
 import * as Device from 'expo-device';
 import * as Localization from 'expo-localization';
@@ -8,9 +5,13 @@ import Constants from 'expo-constants';
 import * as Random from 'expo-random';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Analytics, Auth } from 'aws-amplify';
+import LOGGER from '@/services/logger';
 import { StorageKeys } from '@/utilities/constants';
 import { setItem, getItem } from '@/utilities/asyncCache';
 import { getLocation, getReverseGeocode } from '@/services/location';
+
+LOGGER.enable('ANALYTICS');
+const log = LOGGER.extend('ANALYTICS');
 
 /* Generate or retrieve (if already exists) a UID for the device */
 const getUID = async () => {
@@ -43,7 +44,7 @@ const getChannelType = (os: string) => {
     default:
       return '';
   }
-}
+};
 
 /* Get the real device info */
 const getDeviceInfo = (os: string) => {
@@ -53,36 +54,32 @@ const getDeviceInfo = (os: string) => {
       // appVersion: Nothing is available by default but we could probably pass in a version with env
       model: Constants.deviceName,
       platform: os,
-    }
-  } else {
-    return {
-      appVersion: Constants.nativeAppVersion,
-      make: Device.manufacturer,
-      model: Device.modelName,
-      modelVersion: Device.modelId,
-      platform: os,
-      platformVersion: Device.osVersion,
-    }
+    };
   }
-}
+  return {
+    appVersion: Constants.nativeAppVersion,
+    make: Device.manufacturer,
+    model: Device.modelName,
+    modelVersion: Device.modelId,
+    platform: os,
+    platformVersion: Device.osVersion,
+  };
+};
 
 /* Determine if the device is a tablet using width */
 export const isTablet = () => {
-  let pixelDensity = Dimensions.get('window').scale;
+  const pixelDensity = Dimensions.get('window').scale;
   const adjustedWidth = Dimensions.get('window').width * pixelDensity;
   const adjustedHeight = Dimensions.get('window').height * pixelDensity;
   if (pixelDensity < 2 && (adjustedWidth >= 1000 || adjustedHeight >= 1000)) {
     return true;
-  } else {
-    return (
-      pixelDensity === 2 && (adjustedWidth >= 1920 || adjustedHeight >= 1920)
-    );
   }
+  return pixelDensity === 2 && (adjustedWidth >= 1920 || adjustedHeight >= 1920);
 };
 
 /* Get device type */
 const getDeviceType = () => {
-  switch(Platform.OS) {
+  switch (Platform.OS) {
     case 'ios':
       const platformIOS = Platform as PlatformIOSStatic;
       if (platformIOS.isPad) return 'iPad';
@@ -95,19 +92,20 @@ const getDeviceType = () => {
       return 'Android Phone';
     case 'web':
       if ('ontouchstart' in window || navigator.maxTouchPoints) {
-        if(isTablet()) return "Tablet Browser";
+        if (isTablet()) return 'Tablet Browser';
         return 'Mobile Browser';
-      } else {
-        return 'Desktop Browser';
       }
+      return 'Desktop Browser';
+
     default:
       return 'Unknown';
   }
-}
+};
 
 /* Update endpoint config with location info */
 export const updateEndpointLocation = async () => {
-  let place, coords;
+  let place;
+  let coords;
   const cachedRGC = await getItem(StorageKeys.REVERSE_GEOCODE);
 
   if (!cachedRGC) {
@@ -115,25 +113,25 @@ export const updateEndpointLocation = async () => {
     const reverseGeo = await getReverseGeocode(location.coords);
     place = reverseGeo.Results[0].Place;
     coords = location.coords;
-    await setItem(StorageKeys.REVERSE_GEOCODE, { place, coords }, 60*60*24);
+    await setItem(StorageKeys.REVERSE_GEOCODE, { place, coords }, 60 * 60 * 24);
   } else {
-    place = cachedRGC['place'];
-    coords = cachedRGC['coords'];
+    place = cachedRGC.place;
+    coords = cachedRGC.coords;
   }
 
   const config = {
-      city: place?.Municipality,
-      country: place?.Country,
-      latitude: coords?.latitude,
-      longitude: coords?.longitude,
-      postalCode: place?.PostalCode,
-      region: place?.Region
-  }
+    city: place?.Municipality,
+    country: place?.Country,
+    latitude: coords?.latitude,
+    longitude: coords?.longitude,
+    postalCode: place?.PostalCode,
+    region: place?.Region,
+  };
 
   await Analytics.updateEndpoint({ location: config });
   log.info('Updated endpoint with location info');
   log.debug('\n', JSON.stringify(config, null, 2));
-}
+};
 
 /* Get analytics config */
 export const getConfig = async () => {
@@ -142,7 +140,7 @@ export const getConfig = async () => {
   const deviceInfo = getDeviceInfo(Platform.OS);
   const deviceType = getDeviceType();
 
-  return { 
+  return {
     Analytics: {
       AWSPinpoint: {
         appId: process.env.AWS_ANALYTICS_PINPOINT_APP_ID,
@@ -153,18 +151,19 @@ export const getConfig = async () => {
           attributes: {
             appType: [deviceInfo.platform === 'web' ? 'web' : 'native'],
             deviceType: [deviceType],
-            screenResolution: [`${Dimensions.get('window').width.toFixed(0)}x${Dimensions.get('window').height.toFixed(0)}`],
+            screenResolution: [
+              `${Dimensions.get('window').width.toFixed(0)}x${Dimensions.get('window').height.toFixed(0)}`,
+            ],
           },
           channelType: channelType || 'APNS',
           demographic: {
             ...deviceInfo,
             locale: Localization.locale,
-            timezone: Localization.timezone
+            timezone: Localization.timezone,
           },
-          userId: uid // For unauth, use device uid and update to userId after auth
+          userId: uid, // For unauth, use device uid and update to userId after auth
         },
-      }
-    }
-  }
-}
-
+      },
+    },
+  };
+};

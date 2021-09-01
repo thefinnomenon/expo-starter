@@ -1,8 +1,9 @@
+import Amplify from 'aws-amplify';
 import LOGGER from '@/services/logger';
+import { getConfig } from '@/services/analytics';
+
 LOGGER.enable('AMPLIFY');
 const log = LOGGER.extend('AMPLIFY');
-import Amplify from 'aws-amplify';
-import { getConfig } from '@/services/analytics';
 
 export const initAmplify = async () => {
   const analyticsConfig = await getConfig();
@@ -15,7 +16,7 @@ export const initAmplify = async () => {
       mandatorySignIn: false,
     },
     ...analyticsConfig,
-  })
+  });
 
   log.info('Amplify initialized');
-}
+};

@@ -1,17 +1,18 @@
-import LOGGER from '@/services/logger';
-LOGGER.enable('APP');
-const log = LOGGER.extend('APP');
-import Amplify, { Analytics } from 'aws-amplify';
+import { Analytics } from 'aws-amplify';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
+import { LocationObject } from 'expo-location';
+import { SearchPlaceIndexForPositionResponse } from 'aws-sdk/clients/location';
+import LOGGER from '@/services/logger';
 import Sentry, { initSentry } from '@/services/sentry';
 import { initAmplify } from '@/api/amplify';
 import { initLocation, getLocation, getReverseGeocode } from '@/services/location';
 import { updateEndpointLocation } from '@/services/analytics';
-import { SomeUtility } from '@/utilities/test';
-import { LocationObject } from 'expo-location';
-import { SearchPlaceIndexForPositionResponse } from "aws-sdk/clients/location";
+import { SomeUtility } from '@/utilities/testUtility';
+
+LOGGER.enable('APP');
+const log = LOGGER.extend('APP');
 
 initSentry(false);
 
@@ -28,7 +29,7 @@ export default function App() {
       const loc = await getLocation();
       setLocation(loc);
       // TODO: If cannot access device location, use IP to Location API instead
-      if(locEnabled) {
+      if (locEnabled) {
         const reverseGeo = await getReverseGeocode(loc.coords);
         setReverseGeocode(reverseGeo);
         await updateEndpointLocation();
@@ -47,13 +48,20 @@ export default function App() {
       <Text>Longitude: {location?.coords.longitude}</Text>
       <Text>- Reverse Geocode -</Text>
       <Text>{rgc?.Label}</Text>
-      <Button title='Press to cause error!' onPress={() => {
-        log.error('Oh no!!!');
-        Sentry.captureException(new Error('Oops!'));
-      }} />
-      <Button title='Press to cause analytics event!' onPress={() => {
-        Analytics.record({ name: 'buttonClick' });
-      }} />
+      <Button
+        title="Press to cause error!"
+        onPress={() => {
+          log.error('Oh no!!!');
+          Sentry.captureException(new Error('Oops!'));
+        }}
+      />
+      <Button
+        title="Press to cause analytics event!"
+        onPress={() => {
+          Analytics.record({ name: 'buttonClick' });
+        }}
+      />
+      {/* eslint-disable-next-line */}
       <StatusBar style="auto" />
     </View>
   );

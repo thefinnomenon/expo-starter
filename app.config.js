@@ -1,49 +1,45 @@
 export default {
   expo: {
-    name: "expo-starter",
-    slug: "expo-starter",
-    version: "1.0.0",
-    orientation: "portrait",
-    icon: "./src/assets/icon.png",
+    name: 'expo-starter',
+    slug: 'expo-starter',
+    version: '1.0.0',
+    orientation: 'portrait',
+    icon: './src/assets/icon.png',
     splash: {
-      image: "./src/assets/splash.png",
-      resizeMode: "contain",
-      backgroundColor: "#ffffff"
+      image: './src/assets/splash.png',
+      resizeMode: 'contain',
+      backgroundColor: '#ffffff',
     },
     hooks: {
       postPublish: [
         {
-          file: "sentry-expo/upload-sourcemaps",
+          file: 'sentry-expo/upload-sourcemaps',
           config: {
             organization: process.env.SENTRY_ORGANIZATION,
             project: process.env.SENTRY_PROJECT,
             authToken: process.env.SENTRY_AUTH_TOKEN,
             setCommits: true,
             deployEnv: process.env.NODE_ENV,
-          }
-        }
-      ]
+          },
+        },
+      ],
     },
     updates: {
-      fallbackToCacheTimeout: 0
+      fallbackToCacheTimeout: 0,
     },
-    assetBundlePatterns: [
-      "**/*"
-    ],
+    assetBundlePatterns: ['**/*'],
     ios: {
-      supportsTablet: true
+      supportsTablet: true,
     },
     android: {
       adaptiveIcon: {
-        foregroundImage: "./src/assets/adaptive-icon.png",
-       backgroundColor: "#FFFFFF"
-      }
+        foregroundImage: './src/assets/adaptive-icon.png',
+        backgroundColor: '#FFFFFF',
+      },
     },
     web: {
-      favicon: "./src/assets/favicon.png"
+      favicon: './src/assets/favicon.png',
     },
-    plugins: [
-      "sentry-expo"
-    ]
-  }
-}
+    plugins: ['sentry-expo'],
+  },
+};

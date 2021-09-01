@@ -14,4 +14,8 @@ web-build/
 
 # envs
 envs/.env.development
+envs/.env.test
 envs/.env.production
+
+# testing
+coverage/

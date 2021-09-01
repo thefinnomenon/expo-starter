@@ -8,10 +8,10 @@ module.exports = async (env, argv) => {
   config.plugins = [
     ...config.plugins,
     new Dotenv({
-      path: `./envs/.env.${process.env.NODE_ENV}`
-    })
-  ]
-  
+      path: `./envs/.env.${process.env.NODE_ENV}`,
+    }),
+  ];
+
   config.resolve.alias = {
     ...config.resolve.alias,
 
