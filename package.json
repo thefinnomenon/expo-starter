@@ -13,6 +13,10 @@
     "test:updateSnapshots": "jest -u",
     "test:ci": "jest --coverage",
     "test:badges": "npm run test:ci  && jest-coverage-badges --input coverage/coverage-summary.json --output __badges__",
+    "cypress": "cypress open",
+    "cypress:headless": "cypress run",
+    "e2e": "start-server-and-test start http://localhost:3000 cypress",
+    "e2e:headless": "start-server-and-test start http://localhost:3000 cypress:headless",
     "eject": "expo eject"
   },
   "dependencies": {
@@ -49,10 +53,12 @@
     "@types/react-native": "~0.63.2",
     "@types/react-test-renderer": "^17.0.1",
     "babel-plugin-module-resolver": "^4.1.0",
+    "cypress": "^8.3.1",
     "dotenv-webpack": "^7.0.3",
     "jest-coverage-badges": "^1.1.2",
     "jest-expo": "^42.1.0",
     "react-test-renderer": "^17.0.2",
+    "start-server-and-test": "^1.13.1",
     "ts-jest": "^26",
     "typescript": "~4.0.0"
   },
