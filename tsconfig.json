@@ -14,5 +14,11 @@
       "@/styles/*": ["src/styles/*"],
       "@/utilities/*": ["src/utilities/*"],
     }
-  }
+  },
+  "exclude": [
+    "**/*.test.js",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "cypress/*"
+  ]
 }

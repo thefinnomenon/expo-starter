@@ -1,4 +1,4 @@
 export const StorageKeys = {
   UID: 'uid',
-  REVERSE_GEOCODE: 'reverse-geocode'
+  REVERSE_GEOCODE: 'reverse-geocode',
 };

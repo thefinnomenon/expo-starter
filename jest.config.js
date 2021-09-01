@@ -1,7 +1,7 @@
 module.exports = {
   testEnvironment: 'jsdom',
   preset: 'jest-expo',
-  setupFiles: ["<rootDir>/jest.setup.js"],
+  setupFiles: ['<rootDir>/jest.setup.js'],
   setupFilesAfterEnv: ['@testing-library/jest-native/extend-expect'],
   globals: {
     'ts-jest': {

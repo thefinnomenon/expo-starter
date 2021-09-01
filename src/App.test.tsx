@@ -16,14 +16,14 @@ describe('<App />', () => {
   });
 
   it('displays process.env.NODE_ENV', () => {
-    const { getByText } = render(<App />);
-    const text = getByText(new RegExp('^process\.env\.NODE_ENV: [a-zA-z0-9]+'));
+    const view = render(<App />);
+    const text = view.getByText(new RegExp('^process.env.NODE_ENV: [a-zA-z0-9]+'));
     expect(text).not.toBeNull();
   });
 
   it('displays process.env.NAME', () => {
-    const { getByText } = render(<App />);
-    const text = getByText(new RegExp('^process\.env\.NAME: [a-zA-z0-9]+'));
+    const view = render(<App />);
+    const text = view.getByText(new RegExp('^process.env.NAME: [a-zA-z0-9]+'));
     expect(text).not.toBeNull();
   });
 });
