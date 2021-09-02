@@ -24,6 +24,10 @@
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.15.7",
     "@react-native-community/netinfo": "^6.0.1",
+    "@react-navigation/bottom-tabs": "^6.0.5",
+    "@react-navigation/drawer": "^6.1.4",
+    "@react-navigation/native": "^6.0.2",
+    "@react-navigation/native-stack": "^6.1.0",
     "aws-amplify": "^4.2.5",
     "aws-sdk": "^2.978.0",
     "babel-plugin-inline-dotenv": "^1.6.0",
@@ -41,7 +45,11 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
+    "react-native-gesture-handler": "~1.10.2",
     "react-native-logs": "^3.0.4",
+    "react-native-reanimated": "~2.2.0",
+    "react-native-safe-area-context": "3.2.0",
+    "react-native-screens": "~3.4.0",
     "react-native-web": "~0.13.12",
     "sentry-expo": "^4.0.0"
   },
