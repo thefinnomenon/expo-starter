@@ -1,11 +1,11 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import DrawerWithTabAndStackNavigator from '@/navigators/DrawerWithTabAndStackNavigator';
+import PasswordlessAuthStackNavigator from '@/navigators/PasswordlessAuthStackNavigator';
 
 export default function App() {
   return (
     <NavigationContainer>
-      <DrawerWithTabAndStackNavigator />
+      <PasswordlessAuthStackNavigator />
     </NavigationContainer>
   );
 }

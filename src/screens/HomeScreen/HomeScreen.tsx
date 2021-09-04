@@ -22,14 +22,14 @@ initSentry(false);
 log.info('app log test');
 
 type TabParamList = {
-  Home: undefined,
-  Details: undefined
-}
+  Home: undefined;
+  Details: undefined;
+};
 
 type StackParamList = {
   Home: undefined;
   Settings: undefined;
-}
+};
 
 type NavigationProps = CompositeNavigationProp<
   BottomTabNavigationProp<TabParamList, 'Home'>,
@@ -38,7 +38,7 @@ type NavigationProps = CompositeNavigationProp<
 
 type Props = {
   navigation: NavigationProps;
-}
+};
 
 export default function HomeScreen({ navigation }: Props) {
   const [location, setLocation] = useState<LocationObject>();
@@ -83,7 +83,7 @@ export default function HomeScreen({ navigation }: Props) {
           Analytics.record({ name: 'buttonClick' });
         }}
       />
-      <Button title='Navigate to Settings' onPress={() => navigation.navigate('Settings')} />
+      <Button title="Navigate to Settings" onPress={() => navigation.navigate('Settings')} />
       {/* eslint-disable-next-line */}
       <StatusBar style="auto" />
     </View>
