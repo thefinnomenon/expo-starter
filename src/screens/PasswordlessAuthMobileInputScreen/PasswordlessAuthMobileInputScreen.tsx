@@ -3,6 +3,7 @@ import { View, StyleSheet, Pressable, Text } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import PhoneInput from 'react-native-phone-number-input';
 import Alert from '@/utilities/alerts';
+import passwordlessMobileLogin from '@/services/authentication';
 
 type RootStackParamList = {
   PasswordlessAuthMobileInput: undefined;
@@ -26,7 +27,7 @@ export default function PasswordlessAuthMobileInputScreen({ navigation }: Props)
   const handleLogin = async () => {
     if (phoneInput.current?.isValidNumber(formattedValue)) {
       try {
-        // TODO: add login call
+        await passwordlessMobileLogin(formattedValue);
         navigation.navigate('PasswordlessAuthVerification', { mobile: formattedValue });
       } catch (err: any) {
         showErrorAlert(err.message);

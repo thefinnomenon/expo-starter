@@ -1,20 +1,17 @@
 import Amplify from 'aws-amplify';
 import LOGGER from '@/services/logger';
-import { getConfig } from '@/services/analytics';
+import { getConfig as getAuthenticationConfig } from '@/services/authentication';
+import { getConfig as getAnalyticsConfig } from '@/services/analytics';
 
 LOGGER.enable('AMPLIFY');
 const log = LOGGER.extend('AMPLIFY');
 
-export const initAmplify = async () => {
-  const analyticsConfig = await getConfig();
-  log.debug(JSON.stringify(analyticsConfig, null, 2));
+export const initAmplify = async (): Promise<void> => {
+  const authenticationConfig = getAuthenticationConfig();
+  const analyticsConfig = await getAnalyticsConfig();
 
   Amplify.configure({
-    Auth: {
-      region: process.env.AWS_REGION,
-      identityPoolId: process.env.AWS_ANALYTICS_IDENTITY_POOL_ID,
-      mandatorySignIn: false,
-    },
+    ...authenticationConfig,
     ...analyticsConfig,
   });
 

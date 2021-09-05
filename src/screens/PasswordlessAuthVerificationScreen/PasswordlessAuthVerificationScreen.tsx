@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StyleSheet, Text, View, TextInput, Pressable, ActivityIndicator, Platform } from 'react-native';
 import Alert from '@/utilities/alerts';
+import { passwordlessMobileLoginVerify, resendConfirmationCode } from '@/services/authentication';
 
 const CODE_LENGTH = 6;
 
@@ -25,7 +26,7 @@ const PasswordlessAuthVerificationScreen = ({ route, navigation }: Props): JSX.E
     setResendTimeout(60);
 
     try {
-      // TODO: Add resend call here
+      await resendConfirmationCode(mobile);
     } catch (e: any) {
       showAlert(e.message);
     }
@@ -35,7 +36,7 @@ const PasswordlessAuthVerificationScreen = ({ route, navigation }: Props): JSX.E
 
   const handleChangeText = (value: string) => {
     setCode(value);
-    if (value.length === CODE_LENGTH) verifyCode();
+    if (value.length === CODE_LENGTH) verifyCode(value);
   };
 
   /* Set resend timeout and handle inital focus */
@@ -66,10 +67,14 @@ const PasswordlessAuthVerificationScreen = ({ route, navigation }: Props): JSX.E
     setContainerIsFocused(false);
   };
 
-  const verifyCode = () => {
+  const verifyCode = async (value: string) => {
     setIsVerifying(true);
-    // TODO: Add verification call here
-    setTimeout(() => reset(), 2000);
+    try {
+      await passwordlessMobileLoginVerify(mobile, value);
+    } catch (error: any) {
+      showAlert(error);
+      reset();
+    }
   };
 
   const toDigitInput = (_value: number, idx: number) => {
