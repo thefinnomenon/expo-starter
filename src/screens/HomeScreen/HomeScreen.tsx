@@ -7,29 +7,25 @@ import { Analytics } from 'aws-amplify';
 import { StatusBar } from 'expo-status-bar';
 import { LocationObject } from 'expo-location';
 import { SearchPlaceIndexForPositionResponse } from 'aws-sdk/clients/location';
+import { logout } from '@/services/authentication';
 import LOGGER from '@/services/logger';
-import Sentry, { initSentry } from '@/services/sentry';
-import { initAmplify } from '@/api/amplify';
+import Sentry from '@/services/sentry';
 import { initLocation, getLocation, getReverseGeocode } from '@/services/location';
 import { updateEndpointLocation } from '@/services/analytics';
 import { SomeUtility } from '@/utilities/testUtility';
 
-LOGGER.enable('APP');
-const log = LOGGER.extend('APP');
-
-initSentry(false);
-
-log.info('app log test');
+LOGGER.enable('HOME');
+const log = LOGGER.extend('HOME');
 
 type TabParamList = {
-  Home: undefined,
-  Details: undefined
-}
+  Home: undefined;
+  Details: undefined;
+};
 
 type StackParamList = {
   Home: undefined;
   Settings: undefined;
-}
+};
 
 type NavigationProps = CompositeNavigationProp<
   BottomTabNavigationProp<TabParamList, 'Home'>,
@@ -38,15 +34,14 @@ type NavigationProps = CompositeNavigationProp<
 
 type Props = {
   navigation: NavigationProps;
-}
+};
 
-export default function HomeScreen({ navigation }: Props) {
+export default function HomeScreen({ navigation }: Props): JSX.Element {
   const [location, setLocation] = useState<LocationObject>();
   const [reverseGeocode, setReverseGeocode] = useState<SearchPlaceIndexForPositionResponse>();
 
   useEffect(() => {
     (async () => {
-      await initAmplify();
       const locEnabled = await initLocation();
       const loc = await getLocation();
       setLocation(loc);
@@ -83,7 +78,7 @@ export default function HomeScreen({ navigation }: Props) {
           Analytics.record({ name: 'buttonClick' });
         }}
       />
-      <Button title='Navigate to Settings' onPress={() => navigation.navigate('Settings')} />
+      <Button title="Logout" onPress={() => logout()} />
       {/* eslint-disable-next-line */}
       <StatusBar style="auto" />
     </View>

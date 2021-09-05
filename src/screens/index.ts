@@ -1,3 +1,3 @@
 export { default as HomeScreen } from '@/screens/HomeScreen';
-export { default as SettingsScreen } from '@/screens/SettingsScreen';
-export { default as DetailsScreen } from '@/screens/DetailsScreen';
+export { default as PasswordlessAuthMobileInputScreen } from '@/screens/PasswordlessAuthMobileInputScreen';
+export { default as PasswordlessAuthVerificationScreen } from '@/screens/PasswordlessAuthVerificationScreen';

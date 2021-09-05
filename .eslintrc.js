@@ -102,5 +102,8 @@ module.exports = {
     'testing-library/no-debug': 0,
     'no-case-declarations': 0,
     'no-new': 0,
+    'import/no-named-as-default': 0,
+    '@typescript-eslint/no-explicit-any': 0,
+    'no-alert': 0,
   },
 };
