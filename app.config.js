@@ -28,6 +28,18 @@ export default {
       fallbackToCacheTimeout: 0,
     },
     assetBundlePatterns: ['**/*'],
+    plugins: [
+      'sentry-expo',
+      [
+        'expo-notifications',
+        {
+          // icon: "./src/assets/myNotificationIcon.png",
+          // color: "#ffffff",
+          sounds: ['./src/assets/mySound.wav'],
+          mode: process.env.NODE_ENV,
+        },
+      ],
+    ],
     ios: {
       supportsTablet: true,
     },
@@ -40,6 +52,5 @@ export default {
     web: {
       favicon: './src/assets/favicon.png',
     },
-    plugins: ['sentry-expo'],
   },
 };
