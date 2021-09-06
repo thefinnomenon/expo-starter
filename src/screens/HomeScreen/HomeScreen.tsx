@@ -11,6 +11,7 @@ import { logout } from '@/services/authentication';
 import LOGGER from '@/services/logger';
 import Sentry from '@/services/sentry';
 import { initLocation, getLocation, getReverseGeocode } from '@/services/location';
+import NotificationService from '@/services/notifications';
 import { updateEndpointLocation } from '@/services/analytics';
 import { SomeUtility } from '@/utilities/testUtility';
 
@@ -37,16 +38,20 @@ type Props = {
 };
 
 export default function HomeScreen({ navigation }: Props): JSX.Element {
+  const [notifications, setNotifications] = useState(new NotificationService());
   const [location, setLocation] = useState<LocationObject>();
   const [reverseGeocode, setReverseGeocode] = useState<SearchPlaceIndexForPositionResponse>();
 
   useEffect(() => {
     (async () => {
+      await notifications.registerForPushNotifications();
       const locEnabled = await initLocation();
       const loc = await getLocation();
-      setLocation(loc);
+      if (loc) {
+        setLocation(loc);
+      }
       // TODO: If cannot access device location, use IP to Location API instead
-      if (locEnabled) {
+      if (locEnabled && loc) {
         const reverseGeo = await getReverseGeocode(loc.coords);
         setReverseGeocode(reverseGeo);
         await updateEndpointLocation();
@@ -60,11 +65,11 @@ export default function HomeScreen({ navigation }: Props): JSX.Element {
       <Text>process.env.NODE_ENV: {process.env.NODE_ENV}</Text>
       <Text>process.env.NAME: {process.env.NAME}</Text>
       <Text>Path Alias: {SomeUtility()}</Text>
-      <Text>- Location -</Text>
+      {/* <Text>- Location -</Text>
       <Text>Latitude: {location?.coords.latitude}</Text>
       <Text>Longitude: {location?.coords.longitude}</Text>
       <Text>- Reverse Geocode -</Text>
-      <Text>{rgc?.Label}</Text>
+      <Text>{rgc?.Label}</Text> */}
       <Button
         title="Press to cause error!"
         onPress={() => {
@@ -78,6 +83,7 @@ export default function HomeScreen({ navigation }: Props): JSX.Element {
           Analytics.record({ name: 'buttonClick' });
         }}
       />
+      <Button title="Schedule Local Notification" onPress={() => notifications.scheduleNotification(2, 'Hi!')} />
       <Button title="Logout" onPress={() => logout()} />
       {/* eslint-disable-next-line */}
       <StatusBar style="auto" />
