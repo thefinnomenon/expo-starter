@@ -2,6 +2,7 @@ import { Auth } from 'aws-amplify';
 import AwsLocation from 'aws-sdk/clients/location';
 import * as Location from 'expo-location';
 import { Alert } from 'react-native';
+import { getLastKnownPositionAsync } from 'expo-location';
 import LOGGER from '@/services/logger';
 
 LOGGER.enable('LOCATION');
@@ -42,8 +43,15 @@ const convertCoordsToPosition = (coords: any) => {
 };
 
 /* Get current location */
-export const getLocation = () => {
-  return Location.getCurrentPositionAsync();
+export const getLocation = async () => {
+  let location;
+  try {
+    location = await Location.getCurrentPositionAsync();
+  } catch (error: any) {
+    // Android issue fix: https://github.com/expo/expo/issues/14248#issuecomment-912394482
+    location = await getLastKnownPositionAsync();
+  }
+  return location;
 };
 
 /* Get reverse geocode for @coords */

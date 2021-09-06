@@ -133,6 +133,21 @@ export const updateEndpointLocation = async () => {
   log.debug('\n', JSON.stringify(config, null, 2));
 };
 
+/* Update endpoint config with user info */
+export const updateEndpointUserInfo = async (user: any) => {
+  const config = {
+    userId: user.attributes.sub,
+    userAttributes: {
+      username: user.username,
+      ...user.attributes,
+    },
+  };
+
+  await Analytics.updateEndpoint({ config });
+  log.info('Updated endpoint with user info');
+  log.debug('\n', JSON.stringify(config, null, 2));
+};
+
 /* Get analytics config */
 export const getConfig = async () => {
   const uid = await getUID();
@@ -143,7 +158,7 @@ export const getConfig = async () => {
   return {
     Analytics: {
       AWSPinpoint: {
-        appId: process.env.AWS_ANALYTICS_PINPOINT_APP_ID,
+        appId: process.env.AWS_PINPOINT_APP_ID,
         region: process.env.AWS_REGION,
         endpointId: uid,
         endpoint: {
