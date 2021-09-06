@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Amplify from 'aws-amplify';
 import { Hub } from '@aws-amplify/core';
 import { NavigationContainer } from '@react-navigation/native';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import LOGGER from '@/services/logger';
 import { initSentry } from '@/services/sentry';
 import { initAmplify } from '@/api/amplify';
@@ -42,3 +43,8 @@ export default function App(): JSX.Element {
 
   return <NavigationContainer>{!user ? <PasswordlessAuthStackNavigator /> : <StackNavigator />}</NavigationContainer>;
 }
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://cra.link/PWA
+serviceWorkerRegistration.register();
