@@ -67,9 +67,59 @@ registerRoute(
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
 self.addEventListener('message', event => {
+  console.log('[Service Worker] Message Event: ', event.data);
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
 });
 
-// Any other custom service worker logic can go here.
+/* NOTIFICATIONS */
+/* Listen for incoming Push events */
+self.addEventListener('push', event => {
+  console.log('[Service Worker] Push Received: ', event.data);
+
+  if (!(self.Notification && self.Notification.permission === 'granted')) return;
+
+  let data = {};
+  if (event.data) {
+    data = event.data.json();
+  }
+
+  const { title } = data;
+  const { message } = data;
+  const options = {
+    body: message,
+    vibrate: [100, 50, 100],
+  };
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+/* Handle a notification click */
+self.addEventListener('notificationclick', event => {
+  console.log('[Service Worker] Notification click: ', event);
+  if (event.action !== '') {
+    console.log('[Service Worker] Notification action: ', event.action);
+    event.waitUntil(
+      (async () => {
+        const clients = await self.clients.matchAll({ type: 'window' });
+        console.log(clients);
+        // eslint-disable-next-line no-restricted-syntax
+        for (const client of clients) {
+          console.log(`[Service Worker] Sending message to client: ${client}, `, {
+            action: event.action,
+          });
+          client.postMessage({
+            action: event.action,
+          });
+        }
+      })(),
+    );
+  }
+
+  event.notification.close();
+});
+
+/* Handle a notification close */
+self.addEventListener('notificationclose', event => {
+  console.log('[Service Worker] Notification close: ', event);
+});
