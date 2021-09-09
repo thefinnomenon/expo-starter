@@ -42,12 +42,14 @@ export default {
     ],
     ios: {
       supportsTablet: true,
+      bundleIdentifier: 'com.thefinnternet.expostarter',
     },
     android: {
       adaptiveIcon: {
         foregroundImage: './src/assets/adaptive-icon.png',
         backgroundColor: '#FFFFFF',
       },
+      package: 'com.thefinnternet.expostarter',
     },
     web: {
       favicon: './src/assets/favicon.png',

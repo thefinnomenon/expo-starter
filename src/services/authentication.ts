@@ -7,19 +7,6 @@ import { StorageKeys } from '@/utilities/constants';
 LOGGER.enable('AUTH');
 const log = LOGGER.extend('AUTH');
 
-export const getConfig = () => {
-  return {
-    Auth: {
-      region: process.env.AWS_REGION,
-      identityPoolId: process.env.AWS_IDENTITY_POOL_ID,
-      userPoolId: process.env.AWS_USER_POOL_ID,
-      userPoolWebClientId: process.env.AWS_USER_POOL_CLIENT_ID,
-      mandatorySignIn: false,
-      authenticationFlowType: 'USER_PASSWORD_AUTH',
-    },
-  };
-};
-
 async function isLoggedIn() {
   try {
     await Auth.currentAuthenticatedUser();

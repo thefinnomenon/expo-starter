@@ -67,7 +67,9 @@ export default class NotificationService {
         Alert('Notification Error', 'Failed to get push token for push notification');
       }
       try {
-        token = (await Notifications.getExpoPushTokenAsync({ experienceId: this.EXPERIENCE_ID })).data;
+        log.info('Retrieving Token');
+        // token = (await Notifications.getExpoPushTokenAsync({ experienceId: this.EXPERIENCE_ID })).data;
+        token = (await Notifications.getDevicePushTokenAsync()).data;
         log.debug(token);
         await this.savePostTokenToDB(token);
       } catch (error) {

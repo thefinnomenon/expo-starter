@@ -1,0 +1,44 @@
+type User @model 
+  @auth(rules: [
+    { allow: owner }
+  ]) {
+  id: ID!
+  endpoints: [Endpoint] @connection(keyName: "endpointByUser", fields: ["id"])
+  subs: [Sub] @connection(keyName: "subByUser", fields: ["id"])
+}
+
+type Endpoint @model 
+  @key(name: "endpointByUser", fields: ["userId", "type", "token"])
+  @auth(rules: [
+    { allow: owner, ownerField: "userId", operations: [read, delete] },
+  ]) {
+  id: ID!
+  arn: String!
+  userId: ID!
+  type: Platform!
+  token: String!
+  user: User!
+}
+
+type Topic @model {
+  id: ID!
+  topic: String!
+  subs: [Sub] @connection(keyName: "subByTopic", fields: ["id"])
+}
+
+type Sub @model
+  @key(name: "subByUser", fields: ["userID"]) 
+  @key(name: "subByTopic", fields: ["topicID"]) {
+  id: ID!
+  userID: ID!
+  topicID: ID!
+  topic: Topic! @connection(fields: ["topicID"])
+  subscriberID: ID!
+  subscriber: Endpoint! @connection(fields: ["subscriberID"])
+}
+
+enum Platform {
+  ios
+  android
+  web
+}

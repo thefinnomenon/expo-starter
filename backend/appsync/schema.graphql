@@ -1,0 +1,281 @@
+type User {
+  id: ID!
+  endpoints(typeToken: ModelEndpointEndpointByUserCompositeKeyConditionInput, filter: ModelEndpointFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelEndpointConnection
+  subs(filter: ModelSubFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelSubConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  owner: String
+}
+
+type Endpoint {
+  id: ID!
+  arn: String!
+  userId: ID!
+  type: Platform!
+  token: String!
+  user: User!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Topic {
+  id: ID!
+  topic: String!
+  subs(filter: ModelSubFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelSubConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Sub {
+  id: ID!
+  userID: ID!
+  topicID: ID!
+  topic: Topic!
+  subscriberID: ID!
+  subscriber: Endpoint!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+enum Platform {
+  ios
+  android
+  web
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelUserConnection {
+  items: [User]
+  nextToken: String
+}
+
+input ModelStringFilterInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+}
+
+input ModelIDFilterInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+}
+
+input ModelIntFilterInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+input ModelFloatFilterInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+}
+
+input ModelBooleanFilterInput {
+  ne: Boolean
+  eq: Boolean
+}
+
+input ModelUserFilterInput {
+  id: ModelIDFilterInput
+  and: [ModelUserFilterInput]
+  or: [ModelUserFilterInput]
+  not: ModelUserFilterInput
+}
+
+type Query {
+  getUser(id: ID!): User
+  listUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String): ModelUserConnection
+  getEndpoint(id: ID!): Endpoint
+  listEndpoints(filter: ModelEndpointFilterInput, limit: Int, nextToken: String): ModelEndpointConnection
+  getTopic(id: ID!): Topic
+  listTopics(filter: ModelTopicFilterInput, limit: Int, nextToken: String): ModelTopicConnection
+  getSub(id: ID!): Sub
+  listSubs(filter: ModelSubFilterInput, limit: Int, nextToken: String): ModelSubConnection
+}
+
+input CreateUserInput {
+  id: ID
+}
+
+input UpdateUserInput {
+  id: ID!
+}
+
+input DeleteUserInput {
+  id: ID
+}
+
+type Mutation {
+  createUser(input: CreateUserInput!): User
+  updateUser(input: UpdateUserInput!): User
+  deleteUser(input: DeleteUserInput!): User
+  createEndpoint(input: CreateEndpointInput!): Endpoint
+  updateEndpoint(input: UpdateEndpointInput!): Endpoint
+  deleteEndpoint(input: DeleteEndpointInput!): Endpoint
+  createTopic(input: CreateTopicInput!): Topic
+  updateTopic(input: UpdateTopicInput!): Topic
+  deleteTopic(input: DeleteTopicInput!): Topic
+  createSub(input: CreateSubInput!): Sub
+  updateSub(input: UpdateSubInput!): Sub
+  deleteSub(input: DeleteSubInput!): Sub
+}
+
+type Subscription {
+  onCreateUser(owner: String!): User @aws_subscribe(mutations: ["createUser"])
+  onUpdateUser(owner: String!): User @aws_subscribe(mutations: ["updateUser"])
+  onDeleteUser(owner: String!): User @aws_subscribe(mutations: ["deleteUser"])
+  onCreateEndpoint(userId: String!): Endpoint @aws_subscribe(mutations: ["createEndpoint"])
+  onUpdateEndpoint(userId: String!): Endpoint @aws_subscribe(mutations: ["updateEndpoint"])
+  onDeleteEndpoint(userId: String!): Endpoint @aws_subscribe(mutations: ["deleteEndpoint"])
+  onCreateTopic: Topic @aws_subscribe(mutations: ["createTopic"])
+  onUpdateTopic: Topic @aws_subscribe(mutations: ["updateTopic"])
+  onDeleteTopic: Topic @aws_subscribe(mutations: ["deleteTopic"])
+  onCreateSub: Sub @aws_subscribe(mutations: ["createSub"])
+  onUpdateSub: Sub @aws_subscribe(mutations: ["updateSub"])
+  onDeleteSub: Sub @aws_subscribe(mutations: ["deleteSub"])
+}
+
+type ModelEndpointConnection {
+  items: [Endpoint]
+  nextToken: String
+}
+
+input ModelPlatformFilterInput {
+  eq: Platform
+  ne: Platform
+}
+
+input ModelEndpointFilterInput {
+  id: ModelIDFilterInput
+  arn: ModelStringFilterInput
+  userId: ModelIDFilterInput
+  type: ModelPlatformFilterInput
+  token: ModelStringFilterInput
+  and: [ModelEndpointFilterInput]
+  or: [ModelEndpointFilterInput]
+  not: ModelEndpointFilterInput
+}
+
+input CreateEndpointInput {
+  id: ID
+  arn: String!
+  userId: ID!
+  type: Platform!
+  token: String!
+}
+
+input UpdateEndpointInput {
+  id: ID!
+  arn: String
+  userId: ID
+  type: Platform
+  token: String
+}
+
+input DeleteEndpointInput {
+  id: ID
+}
+
+type ModelTopicConnection {
+  items: [Topic]
+  nextToken: String
+}
+
+input ModelTopicFilterInput {
+  id: ModelIDFilterInput
+  topic: ModelStringFilterInput
+  and: [ModelTopicFilterInput]
+  or: [ModelTopicFilterInput]
+  not: ModelTopicFilterInput
+}
+
+input CreateTopicInput {
+  id: ID
+  topic: String!
+}
+
+input UpdateTopicInput {
+  id: ID!
+  topic: String
+}
+
+input DeleteTopicInput {
+  id: ID
+}
+
+type ModelSubConnection {
+  items: [Sub]
+  nextToken: String
+}
+
+input ModelSubFilterInput {
+  id: ModelIDFilterInput
+  userID: ModelIDFilterInput
+  topicID: ModelIDFilterInput
+  subscriberID: ModelIDFilterInput
+  and: [ModelSubFilterInput]
+  or: [ModelSubFilterInput]
+  not: ModelSubFilterInput
+}
+
+input CreateSubInput {
+  id: ID
+  userID: ID!
+  topicID: ID!
+  subscriberID: ID!
+}
+
+input UpdateSubInput {
+  id: ID!
+  userID: ID
+  topicID: ID
+  subscriberID: ID
+}
+
+input DeleteSubInput {
+  id: ID
+}
+
+input ModelEndpointEndpointByUserCompositeKeyConditionInput {
+  eq: ModelEndpointEndpointByUserCompositeKeyInput
+  le: ModelEndpointEndpointByUserCompositeKeyInput
+  lt: ModelEndpointEndpointByUserCompositeKeyInput
+  ge: ModelEndpointEndpointByUserCompositeKeyInput
+  gt: ModelEndpointEndpointByUserCompositeKeyInput
+  between: [ModelEndpointEndpointByUserCompositeKeyInput]
+  beginsWith: ModelEndpointEndpointByUserCompositeKeyInput
+}
+
+input ModelEndpointEndpointByUserCompositeKeyInput {
+  type: Platform
+  token: String
+}

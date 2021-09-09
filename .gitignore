@@ -16,8 +16,8 @@ web-build/
 envs/.env.development
 envs/.env.test
 envs/.env.production
+src/aws-exports.js
 
 # testing
 coverage/
-
 .eslintcache

@@ -1,0 +1,99 @@
+#set( $limit = $util.defaultIfNull($context.args.limit, 100) )
+#set( $query = {
+  "expression": "#partitionKey = :partitionKey",
+  "expressionNames": {
+      "#partitionKey": "userId"
+  },
+  "expressionValues": {
+      ":partitionKey": {
+          "S": "$context.source.id"
+    }
+  }
+} )
+## [Start] Applying Key Condition **
+#set( $sortKeyValue = "" )
+#set( $sortKeyValue2 = "" )
+#if( !$util.isNull($ctx.args.typeToken) && !$util.isNull($ctx.args.typeToken.beginsWith) )
+#if( !$util.isNull($ctx.args.typeToken.beginsWith.type) ) #set( $sortKeyValue = "$ctx.args.typeToken.beginsWith.type" ) #end
+#if( !$util.isNull($ctx.args.typeToken.beginsWith.token) ) #set( $sortKeyValue = "$sortKeyValue#$ctx.args.typeToken.beginsWith.token" ) #end
+  #set( $query.expression = "$query.expression AND begins_with(#sortKey, :sortKey)" )
+  $util.qr($query.expressionNames.put("#sortKey", "type#token"))
+  $util.qr($query.expressionValues.put(":sortKey", { "S": "$sortKeyValue" }))
+#end
+#if( !$util.isNull($ctx.args.typeToken) && !$util.isNull($ctx.args.typeToken.between) )
+  #if( $ctx.args.typeToken.between.size() != 2 )
+    $util.error("Argument typeToken.between expects exactly 2 elements.")
+  #end
+#if( !$util.isNull($ctx.args.typeToken.between[0].type) ) #set( $sortKeyValue = "$ctx.args.typeToken.between[0].type" ) #end
+#if( !$util.isNull($ctx.args.typeToken.between[0].token) ) #set( $sortKeyValue = "$sortKeyValue#$ctx.args.typeToken.between[0].token" ) #end
+#if( !$util.isNull($ctx.args.typeToken.between[1].type) ) #set( $sortKeyValue2 = "$ctx.args.typeToken.between[1].type" ) #end
+#if( !$util.isNull($ctx.args.typeToken.between[1].token) ) #set( $sortKeyValue2 = "$sortKeyValue2#$ctx.args.typeToken.between[1].token" ) #end
+  #set( $query.expression = "$query.expression AND #sortKey BETWEEN :sortKey0 AND :sortKey1" )
+  $util.qr($query.expressionNames.put("#sortKey", "type#token"))
+  $util.qr($query.expressionValues.put(":sortKey0", { "S": "$sortKeyValue" }))
+  $util.qr($query.expressionValues.put(":sortKey1", { "S": "$sortKeyValue2" }))
+#end
+#if( !$util.isNull($ctx.args.typeToken) && !$util.isNull($ctx.args.typeToken.eq) )
+#if( !$util.isNull($ctx.args.typeToken.eq.type) ) #set( $sortKeyValue = "$ctx.args.typeToken.eq.type" ) #end
+#if( !$util.isNull($ctx.args.typeToken.eq.token) ) #set( $sortKeyValue = "$sortKeyValue#$ctx.args.typeToken.eq.token" ) #end
+  #set( $query.expression = "$query.expression AND #sortKey = :sortKey" )
+  $util.qr($query.expressionNames.put("#sortKey", "type#token"))
+  $util.qr($query.expressionValues.put(":sortKey", { "S": "$sortKeyValue" }))
+#end
+#if( !$util.isNull($ctx.args.typeToken) && !$util.isNull($ctx.args.typeToken.lt) )
+#if( !$util.isNull($ctx.args.typeToken.lt.type) ) #set( $sortKeyValue = "$ctx.args.typeToken.lt.type" ) #end
+#if( !$util.isNull($ctx.args.typeToken.lt.token) ) #set( $sortKeyValue = "$sortKeyValue#$ctx.args.typeToken.lt.token" ) #end
+  #set( $query.expression = "$query.expression AND #sortKey < :sortKey" )
+  $util.qr($query.expressionNames.put("#sortKey", "type#token"))
+  $util.qr($query.expressionValues.put(":sortKey", { "S": "$sortKeyValue" }))
+#end
+#if( !$util.isNull($ctx.args.typeToken) && !$util.isNull($ctx.args.typeToken.le) )
+#if( !$util.isNull($ctx.args.typeToken.le.type) ) #set( $sortKeyValue = "$ctx.args.typeToken.le.type" ) #end
+#if( !$util.isNull($ctx.args.typeToken.le.token) ) #set( $sortKeyValue = "$sortKeyValue#$ctx.args.typeToken.le.token" ) #end
+  #set( $query.expression = "$query.expression AND #sortKey <= :sortKey" )
+  $util.qr($query.expressionNames.put("#sortKey", "type#token"))
+  $util.qr($query.expressionValues.put(":sortKey", { "S": "$sortKeyValue" }))
+#end
+#if( !$util.isNull($ctx.args.typeToken) && !$util.isNull($ctx.args.typeToken.gt) )
+#if( !$util.isNull($ctx.args.typeToken.gt.type) ) #set( $sortKeyValue = "$ctx.args.typeToken.gt.type" ) #end
+#if( !$util.isNull($ctx.args.typeToken.gt.token) ) #set( $sortKeyValue = "$sortKeyValue#$ctx.args.typeToken.gt.token" ) #end
+  #set( $query.expression = "$query.expression AND #sortKey > :sortKey" )
+  $util.qr($query.expressionNames.put("#sortKey", "type#token"))
+  $util.qr($query.expressionValues.put(":sortKey", { "S": "$sortKeyValue" }))
+#end
+#if( !$util.isNull($ctx.args.typeToken) && !$util.isNull($ctx.args.typeToken.ge) )
+#if( !$util.isNull($ctx.args.typeToken.ge.type) ) #set( $sortKeyValue = "$ctx.args.typeToken.ge.type" ) #end
+#if( !$util.isNull($ctx.args.typeToken.ge.token) ) #set( $sortKeyValue = "$sortKeyValue#$ctx.args.typeToken.ge.token" ) #end
+  #set( $query.expression = "$query.expression AND #sortKey >= :sortKey" )
+  $util.qr($query.expressionNames.put("#sortKey", "type#token"))
+  $util.qr($query.expressionValues.put(":sortKey", { "S": "$sortKeyValue" }))
+#end
+
+
+## [End] Applying Key Condition **
+{
+  "version": "2018-05-29",
+  "operation": "Query",
+  "query":   $util.toJson($query),
+  "scanIndexForward":   #if( $context.args.sortDirection )
+    #if( $context.args.sortDirection == "ASC" )
+true
+    #else
+false
+    #end
+  #else
+true
+  #end,
+  "filter":   #if( $context.args.filter )
+$util.transform.toDynamoDBFilterExpression($ctx.args.filter)
+  #else
+null
+  #end,
+  "limit": $limit,
+  "nextToken":   #if( $context.args.nextToken )
+$util.toJson($context.args.nextToken)
+  #else
+null
+  #end,
+  "index": "endpointByUser"
+}

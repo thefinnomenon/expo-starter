@@ -3,6 +3,7 @@ import AwsLocation from 'aws-sdk/clients/location';
 import * as Location from 'expo-location';
 import { Alert } from 'react-native';
 import { getLastKnownPositionAsync } from 'expo-location';
+import awsmobile from '../aws-exports';
 import LOGGER from '@/services/logger';
 
 LOGGER.enable('LOCATION');
@@ -61,7 +62,7 @@ export const getReverseGeocode = (
 ): Promise<AwsLocation.SearchPlaceIndexForPositionResponse> => {
   return new Promise((resolve, reject) => {
     const params = {
-      IndexName: process.env.AWS_LOCATION_PLACE_INDEX_ID as string,
+      IndexName: awsmobile.aws_place_index_id,
       Position: convertCoordsToPosition(coords),
       MaxResults: maxResults,
     };

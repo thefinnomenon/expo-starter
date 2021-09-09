@@ -1,4 +1,4 @@
-import { Platform, Dimensions, PlatformIOSStatic, PlatformAndroidStatic, PlatformWebStatic } from 'react-native';
+import { Platform, Dimensions, PlatformIOSStatic, PlatformAndroidStatic } from 'react-native';
 import * as Device from 'expo-device';
 import * as Localization from 'expo-localization';
 import Constants from 'expo-constants';
@@ -110,6 +110,8 @@ export const updateEndpointLocation = async () => {
 
   if (!cachedRGC) {
     const location = await getLocation();
+    if (!location) return;
+
     const reverseGeo = await getReverseGeocode(location.coords);
     place = reverseGeo.Results[0].Place;
     coords = location.coords;
@@ -149,36 +151,30 @@ export const updateEndpointUserInfo = async (user: any) => {
 };
 
 /* Get analytics config */
-export const getConfig = async () => {
+export const updateEndpoint = async () => {
   const uid = await getUID();
   const channelType = getChannelType(Platform.OS);
   const deviceInfo = getDeviceInfo(Platform.OS);
   const deviceType = getDeviceType();
 
-  return {
-    Analytics: {
-      AWSPinpoint: {
-        appId: process.env.AWS_PINPOINT_APP_ID,
-        region: process.env.AWS_REGION,
-        endpointId: uid,
-        endpoint: {
-          // address: '',  // TODO: Update with device token, email address, or mobile phone number when user auths
-          attributes: {
-            appType: [deviceInfo.platform === 'web' ? 'web' : 'native'],
-            deviceType: [deviceType],
-            screenResolution: [
-              `${Dimensions.get('window').width.toFixed(0)}x${Dimensions.get('window').height.toFixed(0)}`,
-            ],
-          },
-          channelType: channelType || 'APNS',
-          demographic: {
-            ...deviceInfo,
-            locale: Localization.locale,
-            timezone: Localization.timezone,
-          },
-          userId: uid, // For unauth, use device uid and update to userId after auth
-        },
+  Analytics.updateEndpoint({
+    endpointId: uid,
+    endpoint: {
+      // address: '',  // TODO: Update with device token, email address, or mobile phone number when user auths
+      attributes: {
+        appType: [deviceInfo.platform === 'web' ? 'web' : 'native'],
+        deviceType: [deviceType],
+        screenResolution: [
+          `${Dimensions.get('window').width.toFixed(0)}x${Dimensions.get('window').height.toFixed(0)}`,
+        ],
       },
+      channelType: channelType || 'APNS',
+      demographic: {
+        ...deviceInfo,
+        locale: Localization.locale,
+        timezone: Localization.timezone,
+      },
+      userId: uid, // For unauth, use device uid and update to userId after auth
     },
-  };
+  });
 };

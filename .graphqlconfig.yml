@@ -1,0 +1,20 @@
+# schemaPath isn't working for me so codegen has to be run from backend/appsync/ where the schema is. The paths are relative to there.
+projects:
+  Codegen Project:
+    schemaPath: schema.graphql
+    includes:
+      - ../../src/api/**/*.ts
+    excludes: []
+    extensions:
+      amplify:
+        codeGenTarget: typescript
+        generatedFileName: ../../src/api/appsync.ts
+        docsFilePath: ../../src/api/
+        region: us-east-1
+        apiId: null
+        frontend: javascript
+        framework: react-native
+        maxDepth: 2
+extensions:
+  amplify:
+    version: 3

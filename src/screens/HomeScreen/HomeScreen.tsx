@@ -6,6 +6,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Analytics } from 'aws-amplify';
 import { StatusBar } from 'expo-status-bar';
 import { LocationObject } from 'expo-location';
+import * as Application from 'expo-application';
 import { SearchPlaceIndexForPositionResponse } from 'aws-sdk/clients/location';
 import { logout } from '@/services/authentication';
 import LOGGER from '@/services/logger';
@@ -17,6 +18,8 @@ import { SomeUtility } from '@/utilities/testUtility';
 
 LOGGER.enable('HOME');
 const log = LOGGER.extend('HOME');
+
+log.info(Application.applicationId);
 
 type TabParamList = {
   Home: undefined;

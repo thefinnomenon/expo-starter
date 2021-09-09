@@ -41,6 +41,8 @@ export default function App(): JSX.Element {
     return () => Hub.remove('auth', updateUser);
   }, []);
 
+  console.log(user);
+
   return <NavigationContainer>{!user ? <PasswordlessAuthStackNavigator /> : <StackNavigator />}</NavigationContainer>;
 }
 
