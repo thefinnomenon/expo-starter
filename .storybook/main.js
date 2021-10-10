@@ -9,6 +9,7 @@ module.exports = {
     '@storybook/addon-a11y',
     'storybook-dark-mode',
     'storybook-addon-jsx',
+    'storybook-addon-pseudo-states'
   ],
   webpackFinal: async (config) => {
     // Configure react-native-web aliases
