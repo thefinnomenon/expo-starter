@@ -105,5 +105,6 @@ module.exports = {
     'import/no-named-as-default': 0,
     '@typescript-eslint/no-explicit-any': 0,
     'no-alert': 0,
+    '@typescript-eslint/explicit-module-boundary-types': 0,
   },
 };
