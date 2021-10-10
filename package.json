@@ -24,13 +24,11 @@
     "eject": "expo eject",
     "prepare": "husky install",
     "lint": "eslint . --fix",
-    "prestorybook": "rnstl",
-    "storybook": "./node_modules/@storybook/react-native-server/bin/index.js -p 7007",
-    "storybook-web": "./node_modules/@storybook/react/bin/index.js",
-    "storybook-web:build": "./node_modules/@storybook/react/bin/build.js"
+    "storybook": "start-storybook -p 9009",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "^1.15.7",
+    "@react-native-async-storage/async-storage": "~1.15.0",
     "@react-native-community/netinfo": "^6.0.1",
     "@react-navigation/bottom-tabs": "^6.0.5",
     "@react-navigation/drawer": "^6.1.4",
@@ -71,13 +69,9 @@
     "@storybook/addon-actions": "^6.3.10",
     "@storybook/addon-controls": "^6.3.10",
     "@storybook/addon-essentials": "^6.3.10",
-    "@storybook/addon-knobs": "^5.3",
     "@storybook/addon-links": "^6.3.10",
-    "@storybook/addon-ondevice-actions": "^5.3.23",
-    "@storybook/addon-storyshots": "^6.3.10",
     "@storybook/react": "^6.3.10",
     "@storybook/react-native": "^5.3.25",
-    "@storybook/react-native-server": "^5.3.23",
     "@testing-library/jest-native": "^4.0.2",
     "@testing-library/react-native": "^7.2.0",
     "@types/jest": "^27.0.1",
@@ -134,14 +128,5 @@
   "private": true,
   "lint-staged": {
     "*.js": "eslint --cache --fix"
-  },
-  "config": {
-    "react-native-storybook-loader": {
-      "searchDir": [
-        "./src/"
-      ],
-      "pattern": "**/*.stories.{mdx,js,jsx,ts,tsx}",
-      "outputFile": "./storybook/storyLoader.js"
-    }
   }
 }
